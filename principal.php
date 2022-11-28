@@ -1,9 +1,4 @@
-<?php 
-//session_start(); 
-//if(!(isset($_SESSION['username']))){
-  //header("location:login.php");
-//}
-?>
+<?php include("sesiones.php");?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,60 +7,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pagina Pricipal</title>
 </head>
+
 <body>
-
-  <div>
-    <?php
-    require_once('cabecera.php');
-    ?>
-  </div>
-
-  <?php
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      $cuantasPreguntas = ($_POST["cuantasPreguntas"]);
-      $adivinoEdad = 0;
-
-      if(!empty($_POST['mayorEdad'])) {
-        $respuesta=$_POST['mayorEdad'];
-        if ($respuesta === "si"){
-          //echo "Es mayor de edad";
-          for ($x = 0; $x < $cuantasPreguntas; $x++) {
-           //do {
-              $respuesta = "no";
-              $adivinoEdad = rand(18,120);
-              echo "Tu edad es ".$adivinoEdad."?";
-            //} while ($respuesta === "no");
+<?php
+    require('cabecera.php');
+    $numeroPregunta=0;
+    $cuantasPreguntas = $_SESSION["numeroPreguntas"];
+    $base=18;
+    $techo=120;
+    if($_SESSION["numeroPreguntas"]>$_SESSION["numeroPregunta"]){
+        if(isset($_POST['edad'])){
+            if($_POST['edad']=="correcto"){
+                $_SESSION["resultado"]="correcto";
+                header("Location: inicio.php");
+            }
         }
+        if ($_SESSION["mayorEdad"] === "si"){
+            $adivinoEdad = rand($base,$techo);
+            if(isset($_POST['edad_mayor'])){
+                    $base=$_POST['edad_mayor'];
+                    $adivinoEdad = rand($base,$techo);
+            }
+            if(isset($_POST['edad_menor'])){
+                    $techo=$_POST['edad_menor'];
+                    $adivinoEdad = rand($base,$techo);
+                
+            } 
+            echo "<p>Tu edad es ".$adivinoEdad."?</p>";
+            echo"<form action='".htmlspecialchars($_SERVER["PHP_SELF"])."' method='post'>";
+            echo "<input type='radio' name='edad' value='correcto'><label>Correcto</label></br>";
+            echo "<input type='radio' name='edad_mayor' value='".$adivinoEdad."'><label>Mayor</label></br>";
+            echo "<input type='radio' name='edad_menor' value='".$adivinoEdad."'><label>Menor</label></br>";
+            echo "<input type='submit' value='Siguiente'>";
+            echo"</form>";
+            $_SESSION["numeroPregunta"] = ($_SESSION["numeroPregunta"] +1); 
+        }else{
+            $base=0;
+            $techo=18;
+            $adivinoEdad = rand($base,$techo);
+            if(isset($_POST['edad_mayor'])){
+                    $base=$_POST['edad_mayor'];
+                    $adivinoEdad = rand($base,$techo);
+            }
+            if(isset($_POST['edad_menor'])){
+                    $techo=$_POST['edad_menor'];
+                    $adivinoEdad = rand($base,$techo);
+                
+            } 
+            echo "<p>Tu edad es ".$adivinoEdad."?</p>";
+            echo"<form action='".htmlspecialchars($_SERVER["PHP_SELF"])."' method='post'>";
+            echo "<input type='radio' name='edad' value='correcto'><label>Correcto</label></br>";
+            echo "<input type='radio' name='edad_mayor' value='".$adivinoEdad."'><label>Mayor</label></br>";
+            echo "<input type='radio' name='edad_menor' value='".$adivinoEdad."'><label>Menor</label></br>";
+            echo "<input type='submit' value='Siguiente'>";
+            echo"</form>";
+            $_SESSION["numeroPregunta"] = ($_SESSION["numeroPregunta"] +1); 
         }
-        else {
-          //echo "Es menor de edad";
-          for ($x = 0; $x < $cuantasPreguntas; $x++) {
-          $adivinoEdad = rand(0,17);
-          echo "Tu edad es ".$adivinoEdad."?";
-        }
-        }
-      }
+    }else{
+        $_SESSION["resultado"]="incorrecto";
+        header("Location: inicio.php");
     }
+
 ?>
-  <h1>Adivino tu edad</h1>
-  <!--Formulario-->  
-  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-      
-      <label for="mayorEdad">Eres mayor de edad?</label><br>
-    
-      <input type="radio" name="mayorEdad"" value="si" required/>
-      <label for="mayorEdad">Si</label><br>
-      
-      <input type="radio" name="mayorEdad"" value="no" required/>
-      <label for="mayorEdad">No</label><br>
-      
-      
-      <label for="cuantasPreguntas">En cuantas preguntas se va a adivinar la edad? De 1 a 10</label><br>
-      <input type="number" name="cuantasPreguntas" step="1" min="1" max="10" required/><br>
-     
-      <input type="submit" value="Jugar"/> <br>
-      <hr>
-    </form>       
 </body>
 </html>
