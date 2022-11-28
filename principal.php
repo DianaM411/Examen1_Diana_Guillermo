@@ -1,3 +1,9 @@
+<?php 
+session_start(); 
+if(!(isset($_SESSION['username']))){
+  header("location:login.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +36,18 @@
       <input type="number" name="cuantasPreguntas" step="1" min="1" max="10" required/><br>
      
       <input type="submit" value="Jugar"/> <br>
+      <hr>
+
+      <?php
+    $_SESSION['rand'] = rand(1, 10);
+    $_SESSION['counter'] = 0;
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      $cuantasPreguntas = ($_POST["cuantasPreguntas"]);
+      if(!empty($_POST['mayorEdad'])) {
+     
+    }
+      ?>
+      
 
     </form>       
 </body>
