@@ -1,8 +1,8 @@
 <?php 
-session_start(); 
-if(!(isset($_SESSION['username']))){
-  header("location:login.php");
-}
+//session_start(); 
+//if(!(isset($_SESSION['username']))){
+  //header("location:login.php");
+//}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,16 +19,38 @@ if(!(isset($_SESSION['username']))){
     require_once('cabecera.php');
     ?>
   </div>
+
+  <?php
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      $cuantasPreguntas = ($_POST["cuantasPreguntas"]);
+      $adivinoEdad = 0;
+
+      if(!empty($_POST['mayorEdad'])) {
+        $respuesta=$_POST['mayorEdad'];
+        if ($respuesta === "si"){
+          echo "Es mayor de edad";
+          $adivinoEdad = rand(18,200);
+          echo "Tu edad es ".$adivinoEdad."?";
+        }
+        else {
+          echo "Es menor de edad";
+          $adivinoEdad = rand(0,17);
+          echo "Tu edad es ".$adivinoEdad."?";
+        }
+      }
+    }
+?>
   <h1>Adivino tu edad</h1>
   <!--Formulario-->  
   <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
       
       <label for="mayorEdad">Eres mayor de edad?</label><br>
     
-      <input type="radio" name="mayor" value="si" required/>
+      <input type="radio" name="mayorEdad"" value="si" required/>
       <label for="mayorEdad">Si</label><br>
       
-      <input type="radio" name="mayor" value="no" required/>
+      <input type="radio" name="mayorEdad"" value="no" required/>
       <label for="mayorEdad">No</label><br>
       
       
@@ -37,18 +59,6 @@ if(!(isset($_SESSION['username']))){
      
       <input type="submit" value="Jugar"/> <br>
       <hr>
-
-      <?php
-    $_SESSION['rand'] = rand(1, 10);
-    $_SESSION['counter'] = 0;
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      $cuantasPreguntas = ($_POST["cuantasPreguntas"]);
-      if(!empty($_POST['mayorEdad'])) {
-     
-    }
-      ?>
-      
-
     </form>       
 </body>
 </html>
