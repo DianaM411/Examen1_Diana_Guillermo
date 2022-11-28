@@ -29,14 +29,21 @@
       if(!empty($_POST['mayorEdad'])) {
         $respuesta=$_POST['mayorEdad'];
         if ($respuesta === "si"){
-          echo "Es mayor de edad";
-          $adivinoEdad = rand(18,200);
-          echo "Tu edad es ".$adivinoEdad."?";
+          //echo "Es mayor de edad";
+          for ($x = 0; $x < $cuantasPreguntas; $x++) {
+           //do {
+              $respuesta = "no";
+              $adivinoEdad = rand(18,120);
+              echo "Tu edad es ".$adivinoEdad."?";
+            //} while ($respuesta === "no");
+        }
         }
         else {
-          echo "Es menor de edad";
+          //echo "Es menor de edad";
+          for ($x = 0; $x < $cuantasPreguntas; $x++) {
           $adivinoEdad = rand(0,17);
           echo "Tu edad es ".$adivinoEdad."?";
+        }
         }
       }
     }
